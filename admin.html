@@ -1,0 +1,679 @@
+<h1>Welcome K.Shravya Reddy!</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Employee Management System</title>
+<style>
+  body {
+    background: lavender;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 50px;
+  }
+  form {
+    max-width: 400px;
+    margin: auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  input, select, textarea {
+    width: 100%;
+    padding: 8px;
+    margin: 8px 0;
+    box-sizing: border-box;
+  }
+  button {
+    background-color: blueviolet;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .hidden {
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+<!-- Main Page -->
+<div id="mainPage">
+  <img src="https://media.licdn.com/dms/image/C4D0BAQHHC_SSVMpiyw/company-logo_200_200/0/1650256278666?e=2147483647&v=beta&t=Yxy9I49PIo93J8LrGIWGiYLjYK4dVo1ojrS6FPEKPjc" alt="Aviator training academy" height="300" width="300">
+  <h1>Welcome to Employee Management System</h1>
+  <button onclick="openCreateUser()">Create a New User</button>
+  <button onclick="openDeleteUser()">Delete User</button>
+  <button onclick="openUserDetails()">User Details</button>
+  <button onclick="openWorkReport()">User Work Report</button>
+  <button onclick="openAttendance()">User Attendance</button>
+  <button onclick="openAttendanceReport()">Attendance Report</button>
+</div>
+
+<!-- Create New User Page -->
+<div id="createUserPage" class="hidden">
+    <button type="button" onclick="openNewUserDetails()">New user</button>
+</div>
+
+<!-- New User Details Page -->
+<div id="newUserDetailsPage" class="hidden">
+  <h2>New User Details</h2>
+  <form>
+    <input type="text" id="name" placeholder="Name"><br>
+    <input type="number" id="age" placeholder="Age"><br>
+    <input type="email" id="email" placeholder="Email"><br>
+    <input type="text" id="position" placeholder="Position"><br>
+    <input type="text" id="username" placeholder="Username"><br>
+    <input type="password" id="password" placeholder="Password" autocomplete="new-password"><br>
+    <input type="password" id="confirmPassword" placeholder="Confirm Password"><br>
+    <input type="checkbox" onclick="showPassword()"> Show Password<br>
+    <button type="button" onclick="submitUserDetails()">Submit</button>
+    <button type="button" onclick="goBack()">Back</button>
+  </form>
+</div>
+
+<!-- User Details Page -->
+<div id="userDetailsPage" class="hidden">
+  <h2>User Details</h2>
+  <table id="userDetailsTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Email</th>
+        <th>Position</th>
+        <th>Username</th>
+      </tr>
+    </thead>
+    <tbody id="userDetailsBody">
+      <!-- User details will be dynamically added here -->
+    </tbody>
+  </table>
+  <button type="button" onclick="goBack()">Back</button>
+</div>
+
+<!-- User Work Report Page -->
+<div id="workReportPage" class="hidden">
+    <h2>Work Report</h2>
+    <table id="workReportTable">
+      <thead>
+        <tr>
+          <th>Employee Name</th>
+          <th>Every Month</th>
+          <th>Working Days</th>
+          <th>Sundays</th>
+          <th>Holidays</th>
+          <th>Total Days</th>
+          <th>Total Working</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Work report details will be dynamically added here -->
+      </tbody>
+    </table>
+    <button type="button" onclick="goBack()">Back</button>
+  </div>
+<!-- User Attendance Page -->
+<div id="attendancePage" class="hidden">
+  <h2>User Attendance</h2>
+  <form id="attendanceForm">
+    <label for="attendanceUsername">Username:</label>
+    <input type="text" id="attendanceUsername" required><br><br>
+  
+    <label for="attendanceDate">Date:</label>
+    <input type="date" id="attendanceDate" required><br><br>
+
+    <label for="attendanceDay">Day:</label>
+    <input type="text" id="attendanceDay" required><br><br>
+  
+    <label for="attendanceDesignation">Designation:</label>
+    <input type="text" id="attendanceDesignation" required><br><br>
+  
+    <label for="attendanceManager">Manager:</label>
+    <input type="text" id="attendanceManager" required><br><br>
+                                                      
+    <button type="submit" onclick="submitAttendance()">Submit Attendance</button>
+  </form>
+  <button type="button" onclick="goBack()">Back</button>
+</div>
+
+<!-- Attendance Report Page-->
+<div id="attendanceReportPage" class="hidden">
+  <h3>Attendance Report</h3>
+  <table id="attendanceReport">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Day</th>
+        <th>Employee Name</th>
+        <th>Designation</th>
+        <th>Reporting Manager</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="attendanceReportBody">
+      <!-- Attendance details will be dynamically added here -->
+    </tbody>
+  </table>
+  <button type="button" onclick="goBack()">Back</button>
+</div>
+<!-- Monthly Details Modal -->
+<div id="monthlyDetailsForm" class="hidden">
+    <h2 id="employeeNameModal"></h2>
+    <form id="monthlyDetails">
+      <input type="hidden" id="employeeNameField" name="employeeName">
+      <label for="everyMonth">Every Month:</label>
+      <input type="text" id="everyMonth" name="everyMonth" required><br>
+      <label for="workingDays">Working Days:</label>
+      <input type="text" id="workingDays" name="workingDays" required><br>
+      <label for="sundays">Sundays:</label>
+      <input type="text" id="sundays" name="sundays" required><br>
+      <label for="holidays">Holidays:</label>
+      <input type="text" id="holidays" name="holidays" required><br>
+      <label for="totalDays">Total Days:</label> 
+      <input type="text" id="totalDays" name="totalDays" required><br>
+      <label for="totalWorking">Total Working:</label>
+      <input type="text" id="totalWorking" name="totalWorking" required><br>
+      <button type="button" onclick="submitMonthlyDetails()">Submit</button>
+      <button type="button" onclick="closeModal()">Cancel</button>
+    </form>
+  </div>
+
+<!-- Delete User Page -->
+<div id="deleteUserPage" class="hidden">
+  <h2>Delete User</h2>
+  <form>
+    <input type="text" id="deleteUsername" placeholder="Username to delete"><br>
+    <button type="button" onclick="deleteUser()">Delete</button>
+    <button type="button" onclick="goBack()">Back</button>
+  </form>
+</div>
+
+<script>
+function openCreateUser() {
+  document.getElementById('mainPage').classList.add('hidden');
+  document.getElementById('createUserPage').classList.remove('hidden');
+}
+
+function openNewUserDetails() {
+  document.getElementById('createUserPage').classList.add('hidden');
+  document.getElementById('newUserDetailsPage').classList.remove('hidden');
+}
+
+function openDeleteUser() {
+  document.getElementById('mainPage').classList.add('hidden');
+  document.getElementById('deleteUserPage').classList.remove('hidden');
+}
+
+function openUserDetails() {
+  document.getElementById('mainPage').classList.add('hidden');
+  document.getElementById('userDetailsPage').classList.remove('hidden');
+}
+
+function openWorkReport() {
+  document.getElementById('mainPage').classList.add('hidden');
+  document.getElementById('workReportPage').classList.remove('hidden');
+}
+
+function openAttendance() {
+  document.getElementById('mainPage').classList.add('hidden');
+  document.getElementById('attendancePage').classList.remove('hidden');
+}
+
+function openAttendanceReport() {
+  document.getElementById('mainPage').classList.add('hidden');
+  document.getElementById('attendanceReportPage').classList.remove('hidden');
+}
+
+// Load user details from local storage when the page is loaded
+document.addEventListener("DOMContentLoaded", function() {
+  var userDetails = localStorage.getItem("userDetails");
+  if (userDetails) {
+    document.getElementById("userDetailsBody").innerHTML = userDetails;
+  }
+});
+
+function submitUserDetails() {
+  // Fetch form data
+  var name = document.getElementById('name').value;
+  var age = document.getElementById('age').value;
+  var email = document.getElementById('email').value;
+  var position = document.getElementById('position').value;
+  var username = document.getElementById('username').value;
+  var password = document.getElementById('password').value;
+  var confirmPassword = document.getElementById('confirmPassword').value;
+
+  // Validate form data (e.g., check if passwords match)
+  if (password !== confirmPassword) {
+    alert("Passwords do not match!");
+    return;
+  }
+
+  var userDetailsTable = document.getElementById('userDetailsBody');
+  var newRow = userDetailsTable.insertRow();
+  var cells = [];
+  for (let i = 0; i < 5; i++) {
+    cells.push(newRow.insertCell());
+  }
+  cells[0].innerText = name;
+  cells[1].innerText = age;
+  cells[2].innerText = email;
+  cells[3].innerText = position;
+  cells[4].innerText = username;
+
+  // Store user details in local storage
+  localStorage.setItem("userDetails", userDetailsTable.innerHTML);
+
+  // Show the main page
+  document.getElementById('mainPage').classList.remove('hidden');
+}
+
+function deleteUser() {
+  var deleteUsername = document.getElementById('deleteUsername').value;
+  var userDetailsTable = document.getElementById('userDetailsBody');
+  var rows = userDetailsTable.rows;
+
+  // Loop through each row of the table
+  for (var i = 0; i < rows.length; i++) {
+    var usernameCell = rows[i].cells[4]; // Assuming the username is in the 5th column (index 4)
+    var username = usernameCell.innerText.trim();
+
+    // If the username matches the one to delete, remove the row and exit the loop
+    if (username === deleteUsername) {
+      userDetailsTable.deleteRow(i);
+      break;
+    }
+  }
+    // Clear the delete input field
+    document.getElementById('deleteUsername').value = '';
+
+  // Update user details in local storage
+  localStorage.setItem("userDetails", userDetailsTable.innerHTML);
+}
+
+function showPassword() {
+  var passwordField = document.getElementById("password");
+  var confirmPasswordField = document.getElementById("confirmPassword");
+  if (passwordField.type === "password") {
+    passwordField.type = "text";
+    confirmPasswordField.type = "text";
+  } else {
+    passwordField.type = "password";
+    confirmPasswordField.type = "password";
+  }
+}
+// Function to handle attendance submission
+function submitAttendance() {
+  var username = document.getElementById('attendanceUsername').value.trim();
+  var date = document.getElementById('attendanceDate').value;
+  var day =  document.getElementById("attendanceDay").value;
+  var designation = document.getElementById('attendanceDesignation').value;
+  var manager = document.getElementById('attendanceManager').value;
+  
+
+  // Validate form fields
+  if (!username || !date ||  !day || !designation || !manager) {
+    console.error("All fields are required.");
+    return;
+  }
+
+  // Get the last day of the month for the selected date
+  var [year, month] = date.split("-");
+  var lastDayOfMonth = new Date(year, month, 0).getDate();
+
+  // Format the last date of the month as "YYYY-MM-DD"
+  var lastDateOfMonth = year + "-" + month + "-" + lastDayOfMonth;
+
+  // Get the status dropdown value (set to default value "Present" if not found)
+  var statusSelect = document.getElementById("status");
+  var status = statusSelect ? statusSelect.value : "Present";
+
+  
+  // Append attendance data to the attendance report table
+  appendAttendanceToReport(date + " to " + lastDateOfMonth, day, username, designation, manager, status);
+
+  // Save attendance data to localStorage
+  saveAttendanceToLocalStorage();
+
+  // Reset the form after successful submission
+  document.getElementById("attendanceForm").reset();
+
+  console.log("Attendance submitted successfully.");
+}
+// Function to format date as "YYYY-MM-DD"
+function formatDate(date) {
+  var year = date.getFullYear();
+  var month = (date.getMonth() + 1).toString().padStart(2, "0");
+  var day = date.getDate().toString().padStart(2, "0");
+  return year + "-" + month + "-" + day;
+}
+
+// Function to get the day of week (e.g., Monday, Tuesday)
+function getDayOfWeek(date) {
+  var daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  return daysOfWeek[date.getDay()];
+}
+
+// Function to append attendance data to the attendance report table
+function appendAttendanceToReport(date, day, username, designation, manager, status) {
+  var table = document.getElementById("attendanceReportBody");
+
+  // Split the date range to get individual dates
+  var dates = date.split(" to ");
+  var startDate = new Date(dates[0]);
+  var endDate = new Date(dates[1]);
+
+  // Loop through each date and create a new row for each
+  while (startDate <= endDate) {
+    var row = table.insertRow();
+    // Insert cells into the new row and populate them with the submitted data
+  var cells = [
+    row.insertCell(0),
+    row.insertCell(1),
+    row.insertCell(2),
+    row.insertCell(3),
+    row.insertCell(4),
+    row.insertCell(5),
+    row.insertCell(6), // For delete button
+  ];
+   // Populate the cells with the submitted data
+    cells[0].innerText = formatDate(startDate); // Format the date
+    cells[1].innerText = getDayOfWeek(startDate); // Get day of week
+    cells[2].innerText = username;
+    cells[3].innerText = designation;
+    cells[4].innerText = manager;
+    // Create the status dropdown menu
+    var statusSelect = document.createElement("select");
+    statusSelect.innerHTML = `
+      <option value="Present">Present</option>
+      <option value="Absent">Absent</option>
+      <option value="HalfDay">HalfDay</option>
+      <option value="Latelogin">Latelogin</option>
+    `;
+    statusSelect.value = status; // Set the default value
+  var statusCell = row.insertCell(5);
+  statusCell.appendChild(statusSelect);
+
+    // Add "Monthly Details" button to the row
+    var detailsButtonCell = row.insertCell();
+    var detailsButton = document.createElement("button");
+    detailsButton.textContent = "Monthly Details";
+    detailsButton.onclick = function() {
+      openMonthlyDetailsFromAttendanceReport(username);
+    };
+    detailsButtonCell.appendChild(detailsButton);
+    // Add delete button to the row
+    var deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete";
+    deleteButton.classList.add("delete-button");
+    deleteButton.dataset.rowIndex = table.rows.length - 1; // Store the index of the row
+    deleteButton.onclick = function() {
+     deleteAttendance(row); // Pass the row to the delete function
+  };
+    cells[6].appendChild(deleteButton);
+  
+    // Get the cell containing the status dropdown
+    var statusCell = row.cells[5];
+    // Find the select element inside the cell
+    var statusSelect = statusCell.querySelector("select");
+    // Get the selected value from the dropdown
+    var status = statusSelect.value;
+
+    // Move to the next day
+    startDate.setDate(startDate.getDate() + 1);
+  
+  }
+
+}
+// Function to save attendance data to localStorage
+function saveAttendanceToLocalStorage() {
+  var table = document.getElementById("attendanceReportBody");
+  var attendanceArray = [];
+
+  // Loop through each row of the table and extract attendance data
+  for (var i = 0; i < table.rows.length; i++) {
+    var row = table.rows[i];
+    var date = row.cells[0].innerHTML;
+    var day = row.cells[1].innerHTML;
+    var username = row.cells[2].innerHTML;
+    var designation = row.cells[3].innerHTML;
+    var manager = row.cells[4].innerHTML;
+    var status = row.cells[5].querySelector("select").value; // Get the selected value from the dropdown
+
+    attendanceArray.push({
+      date: date,
+      day: day,
+      username: username,
+      designation: designation,
+      manager: manager,
+      status: status,
+    });
+  }
+
+  localStorage.setItem("attendanceData", JSON.stringify(attendanceArray));
+}
+// Function to load attendance data from localStorage and display in the attendance report
+function loadAttendanceFromLocalStorage() {
+  var attendanceData = localStorage.getItem("attendanceData");
+  if (attendanceData) {
+    var attendanceArray = JSON.parse(attendanceData);
+    attendanceArray.forEach(function(attendance) {
+      appendAttendanceToReport(attendance.date, attendance.day, attendance.username, attendance.designation, attendance.manager, attendance.status);
+    });
+  }
+}
+// Load attendance data from localStorage when the page loads
+document.addEventListener("DOMContentLoaded", function() {
+  loadAttendanceFromLocalStorage();
+});
+// Event delegation to handle delete button clicks
+document.getElementById("attendanceReportBody").addEventListener("click", function(event) {
+  if (event.target.classList.contains("delete-button")) {
+    var rowIndex = parseInt(event.target.dataset.rowIndex); // Get the row index from the data attribute
+    var row = document.getElementById("attendanceReportBody").rows[rowIndex]; // Get the row to delete
+    deleteAttendance(row);
+  }
+});
+// Function to delete attendance record
+function deleteAttendance(row) {
+  var rowIndex = row.rowIndex;
+  var table = document.getElementById("attendanceReportBody");
+  table.deleteRow(rowIndex); // Remove the row from the table
+
+  // Update localStorage after deletion
+  saveAttendanceToLocalStorage();
+
+  console.log("Attendance record deleted successfully.");
+}
+// Bind submitAttendance function to the form submission
+var attendanceForm = document.getElementById("attendanceForm");
+if (attendanceForm) {
+  attendanceForm.addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent form submission
+    submitAttendance();
+  });
+} else {
+  console.error("Attendance form not found.");
+}
+// Load attendance data from localStorage when the page loads
+loadAttendanceFromLocalStorage();
+
+// Function to open the monthly details form
+function openMonthlyDetailsModal(employeeName) {
+  var modal = document.getElementById("monthlyDetailsForm");
+  modal.classList.remove("hidden");
+  document.getElementById("employeeNameModal").innerText = "Monthly Details for " + employeeName;
+  document.getElementById("employeeNameField").value = employeeName;
+
+  // Show the work report page
+  document.getElementById("workReportPage").classList.remove("hidden");
+}
+
+// Function to open monthly details for an employee from the attendance report
+function openMonthlyDetailsFromAttendanceReport(employeeName) {
+  openMonthlyDetailsModal(employeeName);
+
+ // Populate the current month by default
+  var currentDate = new Date();
+  var currentMonth = currentDate.toLocaleString('default', { month: 'long' });
+  document.getElementById("everyMonth").value = currentMonth;
+  // Hide the attendance report page
+  document.getElementById("attendanceReportPage").classList.add("hidden");
+}
+
+// Function to close the monthly details form
+function closeModal() {
+  var modal = document.getElementById("monthlyDetailsForm");
+  modal.classList.add("hidden");
+
+  // Show the attendance report page
+  document.getElementById("attendanceReportPage").classList.remove("hidden");
+}
+// Function to save work report data to localStorage
+function saveWorkReportToLocalStorage() {
+  var table = document.getElementById("workReportTable").getElementsByTagName('tbody')[0];
+  var workReportArray = [];
+
+  // Loop through each row of the table and extract work report data
+  for (var i = 0; i < table.rows.length; i++) {
+    var row = table.rows[i];
+    var employeeName = row.cells[0].innerText;
+    var everyMonth = row.cells[1].innerText;
+    var workingDays = row.cells[2].innerText;
+    var sundays = row.cells[3].innerText;
+    var holidays = row.cells[4].innerText;
+    var totalDays = row.cells[5].innerText;
+    var totalWorking = row.cells[6].innerText;
+
+    workReportArray.push({
+      employeeName: employeeName,
+      everyMonth: everyMonth,
+      workingDays: workingDays,
+      sundays: sundays,
+      holidays: holidays,
+      totalDays: totalDays,
+      totalWorking: totalWorking,
+    });
+  }
+
+  localStorage.setItem("workReportData", JSON.stringify(workReportArray));
+}
+
+// Function to load work report data from localStorage
+function loadWorkReportFromLocalStorage() {
+  var workReportData = localStorage.getItem("workReportData");
+  if (workReportData) {
+    var workReportArray = JSON.parse(workReportData);
+    workReportArray.forEach(function(report) {
+      var employeeName = report.employeeName;
+      var everyMonth = report.everyMonth;
+      var workingDays = report.workingDays;
+      var sundays = report.sundays;
+      var holidays = report.holidays;
+      var totalDays = report.totalDays;
+      var totalWorking = report.totalWorking;
+      appendWorkReport(employeeName, everyMonth, workingDays, sundays, holidays, totalDays, totalWorking);
+    });
+  }
+}
+
+// Load work report data from localStorage when the page loads
+document.addEventListener("DOMContentLoaded", function() {
+  loadWorkReportFromLocalStorage();
+});
+
+// Function to append work report data to the work report table
+function appendWorkReport(employeeName, everyMonth, workingDays, sundays, holidays, totalDays, totalWorking) {
+  var table = document.getElementById("workReportTable").getElementsByTagName('tbody')[0];
+  var newRow = table.insertRow();
+
+  // Insert cells into the new row and populate them with the submitted data
+  var cells = [
+    newRow.insertCell(0),
+    newRow.insertCell(1),
+    newRow.insertCell(2),
+    newRow.insertCell(3),
+    newRow.insertCell(4),
+    newRow.insertCell(5),
+    newRow.insertCell(6),
+    newRow.insertCell(7) // For delete button
+  ];
+
+  // Populate the cells with the submitted data
+  cells[0].innerText = employeeName;
+  cells[1].innerText = everyMonth;
+  cells[2].innerText = workingDays;
+  cells[3].innerText = sundays;
+  cells[4].innerText = holidays;
+  cells[5].innerText = totalDays;
+  cells[6].innerText = totalWorking;
+
+  // Create the delete button
+  var deleteButton = document.createElement("button");
+  deleteButton.textContent = "Delete";
+  deleteButton.classList.add("delete-button");
+  deleteButton.onclick = function() {
+    deleteWorkReportRow(newRow); // Call function to delete the row
+  };
+
+  // Append the delete button to the last cell
+  cells[7].appendChild(deleteButton);
+
+  // Save work report data to localStorage after appending
+  saveWorkReportToLocalStorage();
+}
+
+// Function to delete a row from the work report table
+function deleteWorkReportRow(row) {
+  row.remove(); // Remove the row from the table
+
+  // Update localStorage after deletion
+  saveWorkReportToLocalStorage();
+
+  console.log("Work report row deleted successfully.");
+}
+
+// Function to submit monthly details for an employee
+function submitMonthlyDetails() {
+  var form = document.getElementById("monthlyDetails");
+  var formData = new FormData(form);
+
+  var employeeName = formData.get("employeeName"); // Fetch employee name from the form
+  var everyMonth = formData.get("everyMonth");
+  var workingDays = formData.get("workingDays");
+  var sundays = formData.get("sundays");
+  var holidays = formData.get("holidays");
+  var totalDays = formData.get("totalDays");
+  var totalWorking = formData.get("totalWorking");
+
+  // Append work report data to the work report table
+  appendWorkReport(employeeName, everyMonth, workingDays, sundays, holidays, totalDays, totalWorking);
+
+  // Close the modal
+  closeModal();
+}
+
+
+function goBack() {
+  // Hide all pages and show the main page
+  document.getElementById('mainPage').classList.remove('hidden');
+  document.getElementById('createUserPage').classList.add('hidden');
+  document.getElementById('newUserDetailsPage').classList.add('hidden');
+  document.getElementById('userDetailsPage').classList.add('hidden');
+  document.getElementById('workReportPage').classList.add('hidden');
+  document.getElementById('attendancePage').classList.add('hidden');
+  document.getElementById('deleteUserPage').classList.add('hidden');
+  document.getElementById('attendanceReportPage').classList.add('hidden');
+}
+</script>
+
+</body>
+</html>
+
+
+     
